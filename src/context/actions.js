@@ -1,0 +1,13 @@
+export const SET_LOADING = "SET_LOADING";
+
+export const BOXCOUNT = "BOXCOUNT";
+export const INCREASEBOXCOUNT = "INCREASEBOXCOUNT";
+export const DECREASEBOXCOUNT = "DECREASEBOXCOUNT";
+
+export const FENCESTATUS = "FENCESTATUS";
+
+export const ADDBOX = "ADDBOX";
+export const DELETEBOX = "DELETEBOX";
+export const SELECTEDBOX = "SELECTEDBOX";
+
+export const FENCEDIMENSIONS = "FENCEDIMESIONS";
