@@ -136,8 +136,6 @@ function Control() {
               FENCE
             </label>
           </div>
-          {fenceBottom}
-          {fenceRight}
         </Nav>
 
         <Button variant="outline-secondary" className="mr-2">
