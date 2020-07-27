@@ -1,19 +1,24 @@
 import {
-  SET_LOADING,
   INCREASEBOXCOUNT,
   DECREASEBOXCOUNT,
   FENCESTATUS,
   ADDBOX,
   DELETEBOX,
   SELECTEDBOX,
+  SELECTEDKEY,
 } from "./actions";
 
 export default (state, action) => {
   switch (action.type) {
-    case SET_LOADING:
-      return { ...state, isLoading: action.payload };
     case FENCESTATUS:
-      return { ...state, fence: action.payload };
+      return {
+        ...state,
+        fence: action.payload,
+        boxes: [],
+        boxCount: 0,
+        fenceBottom: state.fence ? state.fenceBottom - 50 : state.fenceBottom,
+        fenceRight: state.fence ? state.fenceRight - 50 : state.fenceRight,
+      };
     case INCREASEBOXCOUNT:
       return { ...state, boxCount: state.boxCount + action.payload };
     case DECREASEBOXCOUNT:
@@ -27,7 +32,7 @@ export default (state, action) => {
     case DELETEBOX:
       return {
         ...state,
-        boxes: state.boxes.filter((box) => box.id != action.payload),
+        boxes: state.boxes.filter((box) => box.id !== action.payload),
         boxCount: state.boxCount - 1,
       };
 
@@ -37,7 +42,11 @@ export default (state, action) => {
         isBoxSelected: true,
         selectedBox: action.payload,
       };
-
+    case SELECTEDKEY:
+      return {
+        ...state,
+        selectedKey: action.payload,
+      };
     default:
       return state;
   }

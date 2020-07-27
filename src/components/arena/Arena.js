@@ -33,16 +33,7 @@ export default function Arena() {
         tabIndex="0"
       >
         {boxes
-          ? boxes.map((box) => (
-              <BoxComponent
-                key={box.id}
-                id={box.id}
-                xPos={box.xPos}
-                yPos={box.yPos}
-                zPos={box.zPos}
-                isSelected={box.isSelected}
-              />
-            ))
+          ? boxes.map((box) => <BoxComponent key={box.id} box={box} />)
           : " "}
       </div>
     </div>

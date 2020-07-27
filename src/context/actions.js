@@ -11,3 +11,5 @@ export const DELETEBOX = "DELETEBOX";
 export const SELECTEDBOX = "SELECTEDBOX";
 
 export const FENCEDIMENSIONS = "FENCEDIMESIONS";
+
+export const SELECTEDKEY = "SELECTEDKEY";

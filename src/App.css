@@ -7,6 +7,7 @@
   width: 100px;
   height: 100px;
   background: #4db6ac;
+  display: table-cell;
 }
 .M-Box:hover {
   border-radius: 4px;
@@ -17,6 +18,9 @@
   border: 3px solid #e0f2f1;
 }
 
+p {
+  padding: 37px;
+}
 .App-logo {
   -webkit-transition: all 0.2s ease-in;
   -moz-transition: all 0.2s ease-in;

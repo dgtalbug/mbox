@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { BoxContext } from "../../context/Context";
-import { SELECTEDBOX } from "../../context/actions";
+import { SELECTEDBOX, SELECTEDKEY, DELETEBOX } from "../../context/actions";
 
 export default function Box(props) {
   const { state, dispatch } = useContext(BoxContext);
@@ -10,41 +10,76 @@ export default function Box(props) {
   const [boxLeft, setBoxLeft] = useState(0);
   const [boxBottom, setBoxBottom] = useState(0);
   const [boxRight, setBoxRight] = useState(0);
-  const { selectedBox, W, S, A, D, DELETE, fenceTop, fenceLeft } = state;
-  const { id, xPos, yPos, zPos, isSelected } = props;
+  const [selectedKey, setSelectedKey] = useState(null);
+
+  const {
+    fence,
+    fenceValue,
+    boxDimension,
+    selectedBox,
+    W,
+    S,
+    A,
+    D,
+    DELETE,
+    fenceTop,
+    fenceLeft,
+  } = state;
+  const { id, xPos, yPos, zPos, boxNo } = props.box;
   const BoxSelected = selectedBox === id ? "M-BoxSelected" : "";
   useEffect(() => {
+    //
+    return () => {};
+  }, []);
+  const currentBox = document.getElementById(selectedBox);
+  const handleMoveup = () => {
+    if (boxTop - boxDimension > fenceTop) {
+      setBoxTop(boxTop - boxDimension);
+      currentBox.style.top = boxTop - boxDimension + "px";
+    } else if (boxTop > fenceTop) {
+      currentBox.style.top = 0 + "px";
+    }
+  };
+  const handleMoveLeft = () => {
+    if (boxLeft - boxDimension > fenceLeft) {
+      setBoxLeft(boxLeft - boxDimension);
+      currentBox.style.left = boxLeft - boxDimension + "px";
+    } else if (boxLeft > fenceLeft) {
+      currentBox.style.left = 0 + "px";
+    }
+  };
+  const handleMoveRight = () => {
+    if (boxLeft + 200 < fenceRight) {
+      setBoxLeft(boxLeft + boxDimension);
+      currentBox.style.left = boxLeft + boxDimension + "px";
+    } else if (boxLeft < fenceRight) {
+      setBoxLeft(fenceRight - boxDimension);
+      currentBox.style.left = fenceRight - boxDimension + "px";
+    }
+  };
+  const handleMoveBottom = () => {
+    if (boxTop + 200 < fenceBottom) {
+      setBoxTop(boxTop + boxDimension);
+      currentBox.style.top = boxTop + boxDimension + "px";
+    } else if (boxTop < fenceBottom) {
+      setBoxLeft(fenceBottom - boxDimension);
+      currentBox.style.top = fenceBottom - boxDimension + "px";
+    }
+  };
+  const handleKeyUp = (event) => {
+    event.persist();
+    setSelectedKey(event.keyCode);
     const getFenceDimensions = document
       .getElementById("fence")
       .getBoundingClientRect();
     const { bottom, right } = getFenceDimensions;
     setFenceBottom(bottom);
     setFenceRight(right);
-    return () => {};
-  }, []);
-  const currentBox = document.getElementById(selectedBox);
-  const handleMoveup = () => {
-    if (boxTop - 10 > fenceTop) {
-      currentBox.style.top = boxTop - 10 + "px";
-    }
-  };
-  const handleMoveLeft = () => {
-    if (boxLeft - 10 > fenceLeft) {
-      currentBox.style.left = boxLeft - 10 + "px";
-    }
-  };
-  const handleMoveRight = () => {
-    if (boxRight + 10 > fenceRight) {
-      currentBox.style.right = boxRight + 10 + "px";
-    }
-  };
-  const handleMoveBottom = () => {
-    if (boxBottom + 10 > fenceBottom) {
-      currentBox.style.top = boxBottom + 10 + "px";
-    }
-  };
-  const handleKeyUp = (event) => {
-    // event.persist();
+    currentBox.style.transition = "all 0.2s ease";
+    dispatch({
+      type: SELECTEDKEY,
+      payload: event.keyCode,
+    });
     switch (event.keyCode) {
       case W:
         return handleMoveup();
@@ -55,7 +90,10 @@ export default function Box(props) {
       case D:
         return handleMoveRight();
       case DELETE:
-        return console.log(event.keyCode);
+        return dispatch({
+          type: DELETEBOX,
+          payload: id,
+        });
 
       default:
         return console.log(event.keyCode);
@@ -80,17 +118,18 @@ export default function Box(props) {
     <div
       className={"M-Box " + BoxSelected}
       id={id}
-      style={{ position: "absolute", top: yPos, left: xPos, zIndex: zPos }}
+      style={{
+        position: "absolute",
+        top: yPos,
+        left: xPos,
+        zIndex: zPos,
+      }}
       onClick={handleBoxClick}
       tabIndex="0"
-      onKeyDown={handleKeyUp.bind(this)}
-      onKeyPressCapture={handleKeyUp.bind(this)}
+      onKeyUp={handleKeyUp.bind(this)}
+      // onKeyPressCapture={handleKeyUp.bind(this)}
     >
-      x:{yPos}
-      <br></br>
-      y:{xPos}
-      <br></br>
-      {isSelected}
+      <p className="text-center">{boxNo}</p>
     </div>
   );
 }
